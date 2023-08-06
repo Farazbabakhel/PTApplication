@@ -110,6 +110,6 @@ namespace PTApplication.Controllers
         public Response Reject([FromBody] RequestReply requestReply)
         {
             return new UserViewModel(db, configuration, HttpContext).RejectRequestReply(requestReply);
-        }
+        } 
     }
 }

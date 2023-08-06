@@ -8,7 +8,7 @@ namespace PTApplication.Models.DBContext
     public class PTAppDBContext : DbContext
     {
         public PTAppDBContext(DbContextOptions<PTAppDBContext> options) : base(options)
-        {
+        { 
 
         }
 

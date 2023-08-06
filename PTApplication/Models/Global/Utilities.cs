@@ -4,7 +4,7 @@ using System.Security.Claims;
 namespace PTApplication.Models.Global
 {
     public static class Utilities
-    {
+    { 
         public static User GetIdentity(this HttpContext httpContext)
         {
             User user = new User();

@@ -8,7 +8,7 @@ using PTApplication.Models.ViewModels.RechargeVM;
 using System;
 
 namespace PTApplication.Controllers
-{
+{ 
     [Route("PTAPI/[controller]/[action]")]
     [ApiController]
     [Authorize]

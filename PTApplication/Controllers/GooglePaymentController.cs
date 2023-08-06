@@ -7,7 +7,7 @@ using PTApplication.Models.ORM;
 using System.Text;
 
 namespace PTApplication.Controllers
-{
+{ 
     [Route("PTAPI/[controller]/[action]")]
     [ApiController]
     [Authorize]

@@ -7,7 +7,7 @@ using PTApplication.Models.ViewModels.PTBio;
 using PTApplication.Models.ViewModels.Tags;
 
 namespace PTApplication.Controllers
-{
+{ 
     [Route("PTAPI/[controller]/[action]")]
     [ApiController]
     [Authorize]

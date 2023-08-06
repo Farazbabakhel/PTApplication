@@ -1,7 +1,7 @@
 ﻿namespace PTApplication.Models.ORM
 {
     public class Tag
-    {
+    { 
         public Guid? tagID { get; set; }
         public string? name { get; set; }
         public string? description { get; set; }

@@ -21,7 +21,7 @@ namespace PTApplication.Models.ORM
         public string? region { get; set; }
         public decimal? radius { get; set; }
         public decimal? requiredCreditsForContact { get; set; }
-        [NotMapped]
+        [NotMapped] 
         public decimal? requiredCreditsForContactAfterDiscount { get; set; }
         public string? postCode { get; set; }
         public bool? isEmailVerified { get; set; }

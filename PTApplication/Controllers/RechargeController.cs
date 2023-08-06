@@ -45,7 +45,7 @@ namespace PTApplication.Controllers
         public Response DeductBalance([FromBody] Recharge recharge)
         {
             return new RechargeViewModel(db, configuration, HttpContext).DeductBalance(recharge);
-        }
+        } 
 
 
     }

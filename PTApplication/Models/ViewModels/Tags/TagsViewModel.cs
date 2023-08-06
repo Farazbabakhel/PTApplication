@@ -152,7 +152,7 @@ namespace PTApplication.Models.ViewModels.Tags
 
                 // Insert new selected tags of current user
                 foreach (var t in user.userTags)
-                {
+                { 
                    // if (!userTags.Any(x=>x.userID==t.userID && x.tagID==t.tagID && x.isActive==true))
                    // {
                         t.userTagID = Guid.NewGuid();

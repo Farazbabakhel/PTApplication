@@ -1,6 +1,6 @@
 ﻿namespace PTApplication.Models.ORM
 {
-   
+    
     public class Response
     {
         public string name { get; set; }

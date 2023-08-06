@@ -1,5 +1,5 @@
 ﻿namespace PTApplication.Models.ORM
-{
+{ 
     public class PTSetting
     {
         public Guid? pTSettingID { get; set; }

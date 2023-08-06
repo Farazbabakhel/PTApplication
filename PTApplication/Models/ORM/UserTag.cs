@@ -3,7 +3,7 @@
 namespace PTApplication.Models.ORM
 {
     public class UserTag
-    {
+    { 
         public Guid? userTagID { get; set; }
         public Guid? tagID { get; set; }
         public Guid? userID { get; set; }

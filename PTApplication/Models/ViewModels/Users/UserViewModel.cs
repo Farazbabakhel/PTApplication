@@ -9,7 +9,7 @@ using PTApplication.Models.ViewModels.RechargeVM;
 namespace PTApplication.Models.ViewModels.Users
 {
     public class UserViewModel
-    {
+    { 
         private readonly PTAppDBContext db;
         private readonly IConfiguration configuration;
         private readonly HttpContext httpContext;

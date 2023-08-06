@@ -13,7 +13,7 @@ using PTApplication.Models.ViewModels.Tags;
 using System.Net.Http;
 
 namespace PTApplication.Controllers
-{
+{ 
     [Route("PTAPI/[controller]/[action]")]
     [ApiController]
     [Authorize]

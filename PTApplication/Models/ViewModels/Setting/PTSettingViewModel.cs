@@ -10,7 +10,7 @@ namespace PTApplication.Models.ViewModels.Setting
         private readonly IConfiguration configuration;
         private readonly HttpContext httpContext;
         public PTSettingViewModel(PTAppDBContext _db, IConfiguration _configuration, HttpContext _httpContext)
-        {
+        { 
             db = _db;
             configuration = _configuration;
             httpContext = _httpContext;

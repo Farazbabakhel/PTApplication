@@ -1,5 +1,5 @@
 ﻿namespace PTApplication.Models.ORM
-{
+{ 
     public class Recharge
     {
         public Guid? rechargeID { get; set; }

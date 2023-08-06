@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace PTApplication.Models.ORM
-{
+{ 
     public class Package
     {
         [Key]
