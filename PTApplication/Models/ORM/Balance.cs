@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PTApplication.Models.ORM
-{
+{ 
     public class Balance
     {
         public Guid? balanceID { get; set; }

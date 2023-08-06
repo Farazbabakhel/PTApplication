@@ -1,5 +1,5 @@
 ﻿namespace PTApplication.Models.ORM
-{
+{ 
     public class RequestReply
     {
         public Guid? requestReplyID { get; set; }

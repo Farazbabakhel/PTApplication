@@ -4,7 +4,7 @@ using PTApplication.Models.ORM;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace PTApplication.Models.ViewModels.PackageVM
-{
+{ 
     public class PackageViewModel
     {
         private readonly PTAppDBContext db;

@@ -3,7 +3,7 @@ using PTApplication.Models.Global;
 using PTApplication.Models.ORM;
 
 namespace PTApplication.Models.ViewModels.PTBio
-{
+{ 
     public class PTBioViewModel
     {
         private readonly PTAppDBContext db;

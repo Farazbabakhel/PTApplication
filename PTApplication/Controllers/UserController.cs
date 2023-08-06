@@ -119,7 +119,7 @@ namespace PTApplication.Controllers
         public Response GetAllClients()
         {
             return new UserViewModel(db, configuration, HttpContext).GetAllActiveClients();
-        }
+        } 
 
         [HttpGet]
         public Response GetConversions()

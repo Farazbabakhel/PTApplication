@@ -19,7 +19,6 @@
         Recharge = 1,
         Deduction= 2,
         Transfer= 3
-
     }
 
 

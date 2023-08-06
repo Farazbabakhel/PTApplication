@@ -1,5 +1,5 @@
 ﻿namespace PTApplication.Models.ORM
-{
+{ 
     public class Conversion
     {
         public Guid? conversionID { get; set; }

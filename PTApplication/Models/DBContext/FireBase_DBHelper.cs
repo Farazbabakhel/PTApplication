@@ -4,7 +4,7 @@ using FirebaseAdmin;
 namespace PTApplication.Models.DBContext
 {
     public class FireBase_DBHelper
-    {
+    { 
         // Initialize Firebase Admin SDK
 
     }

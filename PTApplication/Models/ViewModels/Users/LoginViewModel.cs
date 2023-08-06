@@ -24,7 +24,7 @@ namespace PTApplication.Models.ViewModels.Users
         {
             Response response;
             try
-            {
+            {  
                 string AdminEmail = configuration["AdminEmail"];
                 string AdminPassword = configuration["AdminPassword"];
                 response = new Response();

@@ -5,7 +5,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 
-//using MailKit.Security;
+//using MailKit.Security; 
 //using Microsoft.Extensions.Options;
 //using MimeKit;
 using PTApplication.Models.Global;

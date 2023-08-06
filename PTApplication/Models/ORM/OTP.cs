@@ -1,5 +1,5 @@
 ﻿namespace PTApplication.Models.ORM
-{
+{ 
     public class OTP
     {
         public Guid? oTPID { get; set; }

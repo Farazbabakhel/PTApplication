@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PTApplication.Models.ORM
-{
+{ 
     public class BioQuestion
     {
         [Key]

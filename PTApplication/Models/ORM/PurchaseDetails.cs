@@ -1,6 +1,6 @@
 ﻿namespace PTApplication.Models.ORM
 {
-  
+   
     public class PurchaseDetails
     {
         public string purchaseToken { get; set; } // The purchase token received from the Google Play Billing Library

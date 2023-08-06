@@ -9,7 +9,7 @@ using PTApplication.Models.ViewModels.RechargeVM;
 namespace PTApplication.Models.ViewModels.Users
 {
     public class UserViewModel
-    {
+    { 
         private readonly PTAppDBContext db;
         private readonly IConfiguration configuration;
         private readonly HttpContext httpContext;
@@ -78,7 +78,7 @@ namespace PTApplication.Models.ViewModels.Users
                 
                 List<User> userList = db.Users.Where(x => !request_ids.Contains(x.userID) && !ids.Contains(x.userID) && x.accountType.ToLower() == "client" && x.isActive == true && x.isProfileCompleted==true).ToList();
                 foreach (User user in userList)
-                {
+                { 
                     user.isDiscountApplicable = true;
                     
                     user.requiredCreditsForContactAfterDiscount = user.requiredCreditsForContact;
