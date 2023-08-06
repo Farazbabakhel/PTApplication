@@ -38,19 +38,23 @@ namespace PTApplication.Controllers
         }
 
         [HttpPost]
-        public Response Add([FromBody] RequestReply requestReply)
+        public async Task<Response> Add([FromBody] RequestReply requestReply)
         {
             Response response= new UserViewModel(db, configuration, HttpContext).AddRequestReply(requestReply);
             if(response.isSuccess)
             {
-                RequestReplyController.SendNotification(requestReply.pTID, "New Request", "You have a new request reply from client.", db);
+                User user= db.Users.Where(x => x.userID == requestReply.clientID).FirstOrDefault();
+                if (user != null)
+                {
+                    await SendNotification(requestReply.pTID, "You have a new request", (String.IsNullOrEmpty(user.fullName)?user.fullName:user.fullName)+" wants to contact you for training.", db);
+                }
             }
 
             return response;
         }
         [NonAction]
 
-        private static async Task<Response> SendNotification(Guid? uID, string Title, string Body, PTAppDBContext database)
+        private async Task<Response> SendNotification(Guid? uID, string title, string body, PTAppDBContext database)
         {
             Response response;
             try
@@ -75,8 +79,8 @@ namespace PTApplication.Controllers
                 {
                     Notification = new Notification
                     {
-                        Title = "New Message",
-                        Body = "You have a new message."
+                        Title = title,
+                        Body = body
                     },
                     Token = CurrentUser.firebaseToken
                 };

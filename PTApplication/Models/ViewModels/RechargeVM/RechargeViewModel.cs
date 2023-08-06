@@ -1,8 +1,10 @@
-﻿using PTApplication.Models.DBContext;
+﻿using Org.BouncyCastle.Asn1.Ocsp;
+using PTApplication.Models.DBContext;
 using PTApplication.Models.Global;
 using PTApplication.Models.ORM;
 using System;
 using System.ComponentModel;
+using System.Linq;
 
 namespace PTApplication.Models.ViewModels.RechargeVM
 {
@@ -226,10 +228,73 @@ namespace PTApplication.Models.ViewModels.RechargeVM
                         {
                             if (!(db.Conversions.Any(x => x.clientID == recharge.clientID && x.ptID == uID && x.isActive == true)))
                             {
-                                if (db.Users.Any(x => x.userID == recharge.clientID && x.isActive == true))
+                                User user = db.Users.Where(x => x.userID == recharge.clientID && x.isActive == true).FirstOrDefault();
+                                if (user!=null)
                                 {
+                                    /* ------------------------------------- DISCOUNT --------------------------------------------------  */
+                                    
+                                        user.isDiscountApplicable = true;
+                                        try
+                                        {
+                                            if (!db.RequestReply.Any(x => x.clientID == user.userID && x.pTID == uID && x.statusID == (int)RequestReplyStatus.Approved && x.isActive == true))
+                                            {
+                                                user.isDiscountApplicable = false;
+                                            }
+                                            if (db.Conversions.Count(x => x.clientID == user.userID && x.isActive == true) >= 5)
+                                            {
+                                                user.isDiscountApplicable = false;
+                                            }
+
+                                            DateTime startDate = Convert.ToDateTime(user.profileCompleteDate);
+                                            DateTime endDate = System.DateTime.Now;
+                                            double days = (endDate - startDate).TotalDays;
+                                            int totalTillNow = db.Conversions.Where(x => x.clientID == recharge.clientID && x.isActive == true).Count();
+                                            if (days >= 8 && user.isDiscountApplicable == true)
+                                            {
+                                                user.isDiscountApplicable = true;
+                                                decimal discount = (decimal)((recharge.credits * 30) / 100);
+                                                recharge.credits = recharge.credits - discount;
+
+                                        }
+                                            else
+                                            {
+                                                user.isDiscountApplicable = false;
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            user.isDiscountApplicable = false;
+                                        }
+                                    
+                                    /*else
+                                    {
+                                        RequestReply req_rep = db.RequestReply.Where(x => x.clientID == recharge.clientID && x.pTID == uID && x.statusID== (int)RequestReplyStatus.Approved && x.isActive == true).FirstOrDefault();
+                                        if (req_rep != null)
+                                        {
+                                            try
+                                            {
+                                                DateTime startDate = Convert.ToDateTime(user.profileCompleteDate);
+                                                DateTime endDate = System.DateTime.Now;
+                                                double days = (endDate - startDate).TotalDays;
+                                                if (days >= 7)
+                                                {
+                                                    decimal discount = (decimal)((recharge.credits * 30) / 100);
+                                                    recharge.credits = recharge.credits - discount;
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                            }
+                                        }
+
+                                    }*/
+                                    /* -----------------------------------------------------------------------------------------------*/
+
+
                                     if (balance.credits >= recharge.credits)
                                     {
+                                        
+
                                         Balance Temp = new Balance();
 
                                         recharge.closingBalance = balance.amount;
@@ -266,6 +331,18 @@ namespace PTApplication.Models.ViewModels.RechargeVM
                                         newConversion.creationDate = Convert.ToDateTime(System.DateTime.Now);
                                         db.Conversions.Add(newConversion);
                                         db.SaveChanges();
+
+                                        int total=db.Conversions.Where(x=>x.clientID==recharge.clientID && x.isActive==true).Count();
+                                        if(total>=5)
+                                        {
+                                            User requestor = db.Users.Where(x => x.userID == recharge.clientID).FirstOrDefault();
+                                            if (requestor != null)
+                                            {
+                                                requestor.isDiscountApplicable = false;
+                                                db.Entry(requestor).CurrentValues.SetValues(requestor);
+                                                db.SaveChanges();
+                                            }
+                                        }
                                         response.message = "Balance Deducted Successfully";
                                         response.summary = "Balance Deducted Successfully";
                                     }

@@ -187,6 +187,9 @@ namespace PTApplication.Models.ViewModels.Users
                     user.postCode = string.IsNullOrEmpty(user.postCode) ? "" : user.postCode;
                     user.fullName = (String.IsNullOrEmpty(user.firstName) ? "" : user.firstName) + " " + (String.IsNullOrEmpty(user.surName) ? "" : user.surName);
                     user.isEmailVerified = false;
+                    user.isDiscountApplicable = false;
+                    user.isProfileCompleted = false;
+                    user.profileCompleteDate = null;
                     db.Users.Add(user);
                     Response OTPResponse = GenerateOTP(user);
 
@@ -360,32 +363,71 @@ namespace PTApplication.Models.ViewModels.Users
                 User CurrentUser = (User)GetUserByUserID().responseObject;
                 if (CurrentUser != null)
                 {
-                    CurrentUser.profilePicture = user.profilePicture;
-                    CurrentUser.firstName = user.firstName;
-                    CurrentUser.lastName = user.lastName;
-                    CurrentUser.surName = user.surName;
-                    CurrentUser.cell = user.cell;
-                    CurrentUser.region = user.region;
-                    CurrentUser.postCode = user.postCode;
-                    CurrentUser.companyName = user.companyName;
-                    CurrentUser.companyEmail = user.companyEmail;
-                    CurrentUser.companyPhone = user.companyPhone;
-                    CurrentUser.website = user.website;
-                    CurrentUser.companyLocation = user.companyLocation;
-                    CurrentUser.companySize = user.companySize;
-                    CurrentUser.yearsInBusiness = user.yearsInBusiness;
-                    CurrentUser.companyDescription = user.companyDescription;
-                    CurrentUser.serviceLocation1 = user.serviceLocation1;
-                    CurrentUser.serviceLocation2 = user.serviceLocation2;
-                    CurrentUser.locationShownOnProfile = user.locationShownOnProfile;
-                    CurrentUser.latitude = user.latitude;
-                    CurrentUser.longitude = user.longitude;
-                    CurrentUser.frequencyTime = user.frequencyTime;
-                    db.Entry(CurrentUser).CurrentValues.SetValues(CurrentUser);
-                    db.SaveChanges();
+                    if ( 
+                        
+                         ( user.accountType.ToLower() == "client" &&
+                        (!String.IsNullOrWhiteSpace(user.firstName) && !String.IsNullOrWhiteSpace(user.surName)
+                        && !String.IsNullOrWhiteSpace(user.cell) && !String.IsNullOrWhiteSpace(user.region)
+                        && !String.IsNullOrWhiteSpace(user.postCode) && !String.IsNullOrWhiteSpace(user.latitude)
+                        && !String.IsNullOrWhiteSpace(user.longitude) && !String.IsNullOrWhiteSpace(user.frequencyTime)
+                        && user.userTags.Count > 0
+                        ))
 
-                    response.summary = "User profile updated successfully.";
-                    response.message = "User profile updated successfully.";
+                        ||
+
+                        (user.accountType.ToLower() == "pt" &&
+                        (!String.IsNullOrWhiteSpace(user.firstName) && !String.IsNullOrWhiteSpace(user.surName)
+                        && !String.IsNullOrWhiteSpace(user.cell) && !String.IsNullOrWhiteSpace(user.companyName)
+                        && !String.IsNullOrWhiteSpace(user.postCode) && !String.IsNullOrWhiteSpace(user.latitude)
+                        && !String.IsNullOrWhiteSpace(user.longitude) && !String.IsNullOrWhiteSpace(user.frequencyTime)
+                        && !String.IsNullOrWhiteSpace(user.companyEmail) && !String.IsNullOrWhiteSpace(user.companyPhone)
+                        && !String.IsNullOrWhiteSpace(user.website) && !String.IsNullOrWhiteSpace(user.companyLocation)
+                        && !String.IsNullOrWhiteSpace(user.companySize) && !String.IsNullOrWhiteSpace(user.yearsInBusiness)
+                        && !String.IsNullOrWhiteSpace(user.companyDescription) && !String.IsNullOrWhiteSpace(user.locationShownOnProfile)
+                        && !String.IsNullOrWhiteSpace(user.serviceLocation1) && !String.IsNullOrWhiteSpace(user.serviceLocation2)
+                        && user.userTags.Count > 0
+                        ))
+
+
+
+                        )
+                    {
+                        CurrentUser.profilePicture = user.profilePicture;
+                        CurrentUser.firstName = user.firstName;
+                        CurrentUser.lastName = user.lastName;
+                        CurrentUser.surName = user.surName;
+                        CurrentUser.cell = user.cell;
+                        CurrentUser.region = user.region;
+                        CurrentUser.postCode = user.postCode;
+                        CurrentUser.companyName = user.companyName;
+                        CurrentUser.companyEmail = user.companyEmail;
+                        CurrentUser.companyPhone = user.companyPhone;
+                        CurrentUser.website = user.website;
+                        CurrentUser.companyLocation = user.companyLocation;
+                        CurrentUser.companySize = user.companySize;
+                        CurrentUser.yearsInBusiness = user.yearsInBusiness;
+                        CurrentUser.companyDescription = user.companyDescription;
+                        CurrentUser.serviceLocation1 = user.serviceLocation1;
+                        CurrentUser.serviceLocation2 = user.serviceLocation2;
+                        CurrentUser.locationShownOnProfile = user.locationShownOnProfile;
+                        CurrentUser.latitude = user.latitude;
+                        CurrentUser.longitude = user.longitude;
+                        CurrentUser.frequencyTime = user.frequencyTime;
+                        CurrentUser.isProfileCompleted = true;
+                        CurrentUser.profileCompleteDate = Convert.ToDateTime(System.DateTime.Now);
+                        db.Entry(CurrentUser).CurrentValues.SetValues(CurrentUser);
+                        db.SaveChanges();
+
+                        response.summary = "User profile updated successfully.";
+                        response.message = "User profile updated successfully.";
+                    }
+                    else
+                    {
+                        response.summary = "All fields are required.";
+                        response.message = "All fields are required.";
+                        response.status = (int)ResponseStatus.Forbidden;
+                        response.isSuccess = false;
+                    }
                 }
 
                 else
@@ -393,6 +435,7 @@ namespace PTApplication.Models.ViewModels.Users
                     response.summary = "User Not found.";
                     response.message = "User Not found.";
                     response.status = (int)ResponseStatus.NotFound;
+                    response.isSuccess = false;
                 }
 
             }
@@ -402,5 +445,7 @@ namespace PTApplication.Models.ViewModels.Users
             }
             return response;
         }
+
+        
     }
 }

@@ -29,7 +29,7 @@ namespace PTApplication.Models.ViewModels.Users
                 Guid? uID = Utilities.GetIdentity(httpContext).userID;
                 var ids = db.RequestReply.Where(x => x.clientID == uID && x.statusID!= (int)RequestReplyStatus.Rejected && x.isActive == true).Select(x => x.pTID).ToArray();
 
-                List<User> userList = db.Users.Where(x => !ids.Contains(x.userID) && x.accountType.ToLower() == "pt" && x.isActive == true).ToList();
+                List<User> userList = db.Users.Where(x => !ids.Contains(x.userID) && x.accountType.ToLower() == "pt" && x.isActive == true && x.isProfileCompleted==true).ToList();
                 foreach (User user in userList)
                 {
                     user.email = "************";
@@ -52,7 +52,8 @@ namespace PTApplication.Models.ViewModels.Users
                                          isActive = ut.isActive,
                                          createdBy = ut.createdBy,
                                          updateDate = ut.updateDate,
-                                         updatedBy = ut.updatedBy
+                                         updatedBy = ut.updatedBy,
+
                                      }).ToList<UserTag>();
                 }
                 response.responseObject = userList;
@@ -75,9 +76,45 @@ namespace PTApplication.Models.ViewModels.Users
 
                 var ids = db.Conversions.Where(x => x.ptID == uID && x.isActive == true).Select(x => x.clientID).ToArray();
                 
-                List<User> userList = db.Users.Where(x => !request_ids.Contains(x.userID) && !ids.Contains(x.userID) && x.accountType.ToLower() == "client" && x.isActive == true).ToList();
+                List<User> userList = db.Users.Where(x => !request_ids.Contains(x.userID) && !ids.Contains(x.userID) && x.accountType.ToLower() == "client" && x.isActive == true && x.isProfileCompleted==true).ToList();
                 foreach (User user in userList)
                 {
+                    user.isDiscountApplicable = true;
+                    
+                    user.requiredCreditsForContactAfterDiscount = user.requiredCreditsForContact;
+                    try
+                        {
+
+                        if (db.RequestReply.Any(x => x.clientID == user.userID && x.pTID == uID && x.statusID == (int)RequestReplyStatus.Approved && x.isActive == true))
+                        {
+                            user.isDiscountApplicable = false;
+                        }
+                        if (db.Conversions.Count(x => x.clientID == user.userID && x.isActive == true) >= 5)
+                        {
+                            user.isDiscountApplicable = false;
+                        }
+
+                        DateTime startDate = Convert.ToDateTime(user.profileCompleteDate);
+                            DateTime endDate = System.DateTime.Now;
+                            double days = (endDate - startDate).TotalDays;
+                            if (days >= 8 && user.isDiscountApplicable==true)
+                            {
+                                user.isDiscountApplicable = true;
+                                decimal discount = (decimal)((user.requiredCreditsForContact * 30) / 100);
+                                user.requiredCreditsForContactAfterDiscount = user.requiredCreditsForContact - discount;
+                            }
+                            else
+                            {
+                                user.isDiscountApplicable = false;
+                                user.requiredCreditsForContactAfterDiscount = user.requiredCreditsForContact;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            user.isDiscountApplicable = false;
+                        user.requiredCreditsForContactAfterDiscount = user.requiredCreditsForContact;
+                    }
+
                     user.email = "************";
                     user.password = "************";
                     user.cell = "************";
@@ -593,6 +630,14 @@ namespace PTApplication.Models.ViewModels.Users
                     if (!rechargeResponse.isSuccess)
                     {
                         throw new Exception(rechargeResponse.message);
+                    }
+
+                    User requestor= db.Users.Where(x => x.userID == myRequest.clientID).FirstOrDefault();
+                    if(requestor!=null)
+                    {
+                        requestor.isDiscountApplicable = false;
+                        db.Entry(requestor).CurrentValues.SetValues(requestor);
+                        db.SaveChanges();
                     }
                     db.SaveChanges();
                     response.message = "Request Approved Successfully.";

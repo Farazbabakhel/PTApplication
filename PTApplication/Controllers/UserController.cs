@@ -135,14 +135,13 @@ namespace PTApplication.Controllers
 
 
         [HttpGet]
-        public async Task<Response> SendNotification()
+        public async Task<Response> SendNotification(Guid uID, string title, string body)
         {
             Response response;
             try
             {
                 
                 response = new Response();
-                Guid? uID = Utilities.GetIdentity(HttpContext).userID;
                 User CurrentUser=db.Users.Where(x => x.userID == uID).FirstOrDefault();
                 var credentials = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bellfit-3840f-firebase-adminsdk-7yovt-184d441605.json"));
 
@@ -161,8 +160,8 @@ namespace PTApplication.Controllers
                 {
                     Notification = new Notification
                     {
-                        Title = "New Message",
-                        Body = "You have a new message."
+                        Title = title,
+                        Body = body
                     },
                     Token = CurrentUser.firebaseToken
                 };

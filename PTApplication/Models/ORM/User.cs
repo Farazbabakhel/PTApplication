@@ -21,6 +21,8 @@ namespace PTApplication.Models.ORM
         public string? region { get; set; }
         public decimal? radius { get; set; }
         public decimal? requiredCreditsForContact { get; set; }
+        [NotMapped]
+        public decimal? requiredCreditsForContactAfterDiscount { get; set; }
         public string? postCode { get; set; }
         public bool? isEmailVerified { get; set; }
         public string? profilePicture { get; set; }
@@ -50,8 +52,11 @@ namespace PTApplication.Models.ORM
         public int? oTP { get; set; }
         public DateTime? creationDate { get; set; }
         public DateTime? updateDate { get; set; }
+        public DateTime? profileCompleteDate { get; set; }
         public Guid? createdBy { get; set; }
         public Guid? updatedBy { get; set; }
+        public bool? isProfileCompleted { get; set; }
+        public bool? isDiscountApplicable { get; set; }
         public bool? isActive { get; set; }
 
         public User()
@@ -59,6 +64,11 @@ namespace PTApplication.Models.ORM
             isBioCompleted = false;
             isActive = true;
             isEmailVerified = false;
+            profileCompleteDate = null;
+            // By default the isDiscountApplicable property will have true value and need to check only more than 7 days
+            // If client request to a PT or 5 PT approch to a client the isDiscountApplicable will be false  
+            isDiscountApplicable = false; 
+            isProfileCompleted = false;
             userTags = new List<UserTag>();
             userRating= new List<Rating>();
         }
