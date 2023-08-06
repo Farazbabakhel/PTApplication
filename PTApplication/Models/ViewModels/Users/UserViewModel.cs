@@ -78,7 +78,7 @@ namespace PTApplication.Models.ViewModels.Users
                 
                 List<User> userList = db.Users.Where(x => !request_ids.Contains(x.userID) && !ids.Contains(x.userID) && x.accountType.ToLower() == "client" && x.isActive == true && x.isProfileCompleted==true).ToList();
                 foreach (User user in userList)
-                {
+                { 
                     user.isDiscountApplicable = true;
                     
                     user.requiredCreditsForContactAfterDiscount = user.requiredCreditsForContact;
